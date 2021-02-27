@@ -69,19 +69,37 @@ namespace AlifMidTermProject
                 }
             }
             catch (System.Exception ex)
-            {                
-                    Console.WriteLine(ex.Message);                
+            {
+                Console.WriteLine(ex.Message);
             }
             finally
             {
                 connection.Close();
             }
         }
-        
-
-        }
-
+        public static void deleteByIdAdmin()
+        {
+            try
+            {
+                connection.Open();
+                Console.Write("Please enter id you would like to delete ");
+                int id = int.Parse(Console.ReadLine());
+                command.CommandText = $"delete AdminCredentials where Id = {id}";
+                var reader = command.ExecuteNonQuery();
+                if (reader > 0)
+                {
+                    Console.WriteLine("Person deleted successfully");
+                }
             }
-        
-    
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+    }
+}
 

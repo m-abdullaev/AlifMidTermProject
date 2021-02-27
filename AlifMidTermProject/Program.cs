@@ -12,8 +12,8 @@ namespace AlifMidTermProject
                     {
                         Console.WriteLine(@"Please choose action: 
                                  1. Create new Admin
-                                 2. Select all
-                                 3. Delete by Id
+                                 2. List of admins
+                                 3. Delete admin by id
                                  ");
                         int action = Convert.ToInt32(Console.ReadLine());
                         switch (action)
@@ -23,6 +23,9 @@ namespace AlifMidTermProject
                                 break;
                             case 2:
                                 AdminCredentials.selectAllAdmin();
+                                break;
+                            case 3:
+                                AdminCredentials.deleteByIdAdmin();
                                 break;
 
                         }
