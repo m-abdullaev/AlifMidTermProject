@@ -100,6 +100,35 @@ namespace AlifMidTermProject
                 connection.Close();
             }
         }
+        public static bool adminValidityCheck()
+        {
+            try
+            {
+                connection.Open();
+                Console.WriteLine("Please enter admin login");
+                string login = Console.ReadLine();
+                Console.WriteLine("Please enter admin password");
+                string password = Console.ReadLine();
+                command.CommandText = $"select * from AdminCredentials";
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (login == reader.GetValue(1).ToString() && password == reader.GetValue(2).ToString())
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
     }
 }
 
