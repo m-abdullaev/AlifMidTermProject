@@ -14,20 +14,17 @@ namespace AlifMidTermProject
         public static string Password { get; set; }
         public static SqlConnection connection = new SqlConnection(conString);
         public static SqlCommand command = connection.CreateCommand();
+
         public static void insertAdmin()
         {
+            Console.Clear();
             try
             {
                 connection.Open();
-
-                //if (connection.State == System.Data.ConnectionState.Open)
-                //{
-                //    Console.WriteLine("Succesfully Connected to Data Base");
-                //}
-
-                Console.WriteLine("Please enter login");
+                
+                Console.WriteLine("Enter login");
                 string Login = Console.ReadLine();
-                Console.WriteLine("Please enter password");
+                Console.WriteLine("Enter password");
                 string Password = Console.ReadLine();
                 command.CommandText = "insert into AdminCredentials(" +
                     "Login," +
@@ -54,13 +51,11 @@ namespace AlifMidTermProject
         }
         public static void selectAllAdmin()
         {
+            Console.Clear();
             try
             {
                 connection.Open();
-                //if (connection.State == System.Data.ConnectionState.Open)
-                //{
-                //    Console.WriteLine("Succesfully Connected to Data Base");
-                //}
+                
                 command.CommandText = $"select * from AdminCredentials";
                 var reader = command.ExecuteReader();
                 while (reader.Read())
@@ -79,6 +74,7 @@ namespace AlifMidTermProject
         }
         public static void deleteByIdAdmin()
         {
+            Console.Clear();
             try
             {
                 connection.Open();
@@ -102,12 +98,13 @@ namespace AlifMidTermProject
         }
         public static bool adminValidityCheck()
         {
+            Console.Clear();
             try
             {
                 connection.Open();
-                Console.WriteLine("Please enter admin login");
+                Console.WriteLine("Enter admin login: ");
                 string login = Console.ReadLine();
-                Console.WriteLine("Please enter admin password");
+                Console.WriteLine("Enter admin password: ");
                 string password = Console.ReadLine();
                 command.CommandText = $"select * from AdminCredentials";
                 var reader = command.ExecuteReader();
