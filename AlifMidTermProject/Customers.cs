@@ -34,17 +34,31 @@ namespace AlifMidTermProject
                 Console.WriteLine("Enter middle name: ");
                 string MiddleName = Console.ReadLine();
                 Console.WriteLine("Enter phone number: ");
-                PhoneNumber = int.Parse(Console.ReadLine());
+                int phoneNumber = int.Parse(Console.ReadLine());
+                if(phoneNumber >= 9)
+                {
+                    PhoneNumber = phoneNumber;
+                }
                 Console.WriteLine("Enter date of birth (yyyy-mm-dd): ");
                 DOB = DateTime.Parse(Console.ReadLine());
-                Console.WriteLine("Enter country of citizenship: ");
-                string Citizenship = Console.ReadLine();
+                Console.WriteLine("Enter country of citizenship: 1. Tajikistan, 2. Foreigner");
+                switch (Console.ReadLine())
+                {
+                    case "1": Citizenship = "Tajikistan"; break;
+                    case "2": Citizenship = "Foreigner"; break;
+                }
                 Console.WriteLine("Enter document number: ");
                 string DocNumber = Console.ReadLine();
                 Console.WriteLine("Enter gender (M/F): ");
                 char Gender = char.Parse(Console.ReadLine());
-                Console.WriteLine("Marital status: ");
-                string MaritalStatus = Console.ReadLine();
+                Console.WriteLine("Marital status: 1. Single, 2. Married, 3. Divorced 4. Widow");
+                switch (Console.ReadLine())
+                {
+                    case "1": MaritalStatus = "Single"; break;
+                    case "2": MaritalStatus = "Married"; break;
+                    case "3": MaritalStatus = "Divorced"; break;
+                    case "4": MaritalStatus = "Widow"; break;
+                }
                 command.CommandText = "insert into Customers(" +
                     "FirstName, " +
                     "LastName, " +
@@ -83,6 +97,7 @@ namespace AlifMidTermProject
         }
         public static void selectAllCustomers()
         {
+            
             Console.Clear();
             try
             {
@@ -92,6 +107,34 @@ namespace AlifMidTermProject
                 while (reader.Read())
                 {
                     Console.WriteLine($"ID: {reader["Id"]}, First name: {reader["FirstName"]}, Last name: {reader["LastName"]}, Middle name: {reader["MiddleName"]}, Phone number: {reader["PhoneNumber"]} Date of birth: {reader["DOB"]}, Citizenship: {reader["Citizenship"]}, Document Number: {reader["DocNumber"]}, Gender: {reader["Gender"]}, Marital status: {reader["MaritalStatus"]}");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public static void selectCustomerByDocNumber()
+        {
+            Console.WriteLine("Enter Customer document number ");
+            string docNumber = Console.ReadLine();
+           
+            try
+            {
+                connection.Open();
+                command.CommandText = $"select * from Customers where DocNumber = {docNumber}";
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Console.WriteLine($"ID: {reader["Id"]}, First name: {reader["FirstName"]}, " +
+                        $"Last name: {reader["LastName"]}, Middle name: {reader["MiddleName"]}, " +
+                        $"Phone number: {reader["PhoneNumber"]} Date of birth: {reader["DOB"]}, " +
+                        $"Citizenship: {reader["Citizenship"]}, Document Number: {reader["DocNumber"]}, " +
+                        $"Gender: {reader["Gender"]}, Marital status: {reader["MaritalStatus"]}");
                 }
             }
             catch (System.Exception ex)

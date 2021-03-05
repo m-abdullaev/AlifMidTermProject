@@ -17,6 +17,8 @@ namespace AlifMidTermProject
                                  1. Create new Admin
                                  2. List of admins
                                  3. Delete admin by id
+                                 4. List of all Customers  
+                                 5. Select customer document number
                                  ");
                             int action = Convert.ToInt32(Console.ReadLine());
                             switch (action)
@@ -29,6 +31,12 @@ namespace AlifMidTermProject
                                     break;
                                 case 3:
                                     AdminCredentials.deleteByIdAdmin();
+                                    break;
+                                case 4:
+                                    Customers.selectAllCustomers();
+                                    break;
+                                case 5:
+                                    Customers.selectCustomerByDocNumber();
                                     break;
                             }
                             break;
@@ -55,7 +63,18 @@ namespace AlifMidTermProject
                                     Console.WriteLine(@"Please choose
                                                 1. Apply for credit
                                                 2. My info
-                                                        ");
+                                                     ");
+                                    int command = int.Parse(Console.ReadLine());
+                                    if (command == 2)
+                                    {
+                                        Customers.selectCustomerByDocNumber();
+                                    }
+                                    else if (command == 1)
+                                    {
+                                        Application.creditApplicationForm();
+                                    }
+                                    else
+                                        Console.WriteLine("Invalid command");
                                 }                                
                             }
                             
