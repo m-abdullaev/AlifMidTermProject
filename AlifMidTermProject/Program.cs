@@ -19,6 +19,7 @@ namespace AlifMidTermProject
                                  3. Delete admin by id
                                  4. List of all Customers  
                                  5. Select customer document number
+                                 6. Delete by Document number
                                  ");
                             int action = Convert.ToInt32(Console.ReadLine());
                             switch (action)
@@ -38,17 +39,19 @@ namespace AlifMidTermProject
                                 case 5:
                                     Customers.selectCustomerByDocNumber();
                                     break;
+                                case 6:
+                                    Customers.deleteByDocNumber();
+                                    break;
                             }
                             break;
                         }
                         else
                         {
                             Console.WriteLine("Invalid data!");
-                        }                       
+                        }
                     }
                     break;
                 case "2":
-                    
                     Console.WriteLine(@"Choose action: 
                                     1. Customer Login
                                     2. Create new customer
@@ -75,9 +78,8 @@ namespace AlifMidTermProject
                                     }
                                     else
                                         Console.WriteLine("Invalid command");
-                                }                                
+                                }
                             }
-                            
                             break;
                         case 2:
                             {

@@ -20,7 +20,8 @@ namespace AlifMidTermProject
         public static string DocNumber { get; set; }
         public static char Gender { get; set; }
         public static string MaritalStatus { get; set; }
-
+        public static string Login { get; set; }
+        public static string Password { get; set; }
         public static void insertCustomer()
         {
             Console.Clear();
@@ -59,30 +60,41 @@ namespace AlifMidTermProject
                     case "3": MaritalStatus = "Divorced"; break;
                     case "4": MaritalStatus = "Widow"; break;
                 }
-                command.CommandText = "insert into Customers(" +
+            
+                Console.WriteLine("Enter Login: ");
+                string Login = Console.ReadLine();
+                Console.WriteLine("Enter Password: ");
+                string Password = Console.ReadLine();
+
+                command.CommandText = "insert into Clients(" +
                     "FirstName, " +
                     "LastName, " +
                     "MiddleName, " +
                     "PhoneNumber, " +
                     "DOB, " +
                     "Citizenship, " +
-                    "DocNumber, " +
                     "Gender, " +
-                    "MaritalStatus ) Values(" +
+                    "MaritalStatus, " +
+                    "DocNumber, " +
+                    "Login, " +
+                    "Password) Values(" +
                     $"'{FirstName}'," +
                     $"'{LastName}'," +
                     $"'{MiddleName}'," +
                     $"'{PhoneNumber}'," +
                     $"'{DOB}'," +
                     $"'{Citizenship}'," +
-                    $"'{DocNumber}'," +
                     $"'{Gender}'," +
-                    $"'{MaritalStatus}')";
+                    $"'{MaritalStatus}'," +
+                    $"'{DocNumber}'," +
+                    $"'{Login}'," +
+                    $"'{Password}')";
                 var result = command.ExecuteNonQuery();
                 if (result > 0)
                 {
 
                     Console.WriteLine("New customer successfully added!");
+                    Console.ReadKey();
 
                 }
             }
@@ -102,11 +114,22 @@ namespace AlifMidTermProject
             try
             {
                 connection.Open();
-                command.CommandText = $"select * from Customers";
+                command.CommandText = $"select * from Clients";
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    Console.WriteLine($"ID: {reader["Id"]}, First name: {reader["FirstName"]}, Last name: {reader["LastName"]}, Middle name: {reader["MiddleName"]}, Phone number: {reader["PhoneNumber"]} Date of birth: {reader["DOB"]}, Citizenship: {reader["Citizenship"]}, Document Number: {reader["DocNumber"]}, Gender: {reader["Gender"]}, Marital status: {reader["MaritalStatus"]}");
+                    Console.WriteLine($"ID: {reader["Id"]},\n" +
+                        $" First name: {reader["FirstName"]}, \n" +
+                        $"Last name: {reader["LastName"]},\n" +
+                        $" Middle name: {reader["MiddleName"]}, \n" +
+                        $"Phone number: {reader["PhoneNumber"]}\n" +
+                        $" Date of birth: {reader["DOB"]}, \n" +
+                        $"Citizenship: {reader["Citizenship"]},\n" +
+                        $"Gender: {reader["Gender"]},\n" +
+                        $"MaritalStatus: {reader["MaritalStatus"]},\n" +
+                        $" Document Number: {reader["DocNumber"]}, \n" +
+                        $"Login: {reader["Login"]},\n" +
+                        $"Password: {reader["Password"]}");
                 }
             }
             catch (System.Exception ex)
@@ -120,33 +143,36 @@ namespace AlifMidTermProject
         }
         public static void selectCustomerByDocNumber()
         {
-            Console.WriteLine("Enter Customer document number ");
-            string docNumber = Console.ReadLine();
-           
-            try
-            {
+            if (connection.State == System.Data.ConnectionState.Closed)
                 connection.Open();
-                command.CommandText = $"select * from Customers where DocNumber = {docNumber}";
-                var reader = command.ExecuteReader();
-                while (reader.Read())
+            Console.Write("Enter Customer document number: ");
+            string docNumber = Console.ReadLine();
+            string str = $"select * from Clients";
+            using (SqlCommand command = new SqlCommand(str,connection))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    Console.WriteLine($"ID: {reader["Id"]}, First name: {reader["FirstName"]}, " +
-                        $"Last name: {reader["LastName"]}, Middle name: {reader["MiddleName"]}, " +
-                        $"Phone number: {reader["PhoneNumber"]} Date of birth: {reader["DOB"]}, " +
-                        $"Citizenship: {reader["Citizenship"]}, Document Number: {reader["DocNumber"]}, " +
-                        $"Gender: {reader["Gender"]}, Marital status: {reader["MaritalStatus"]}");
+                    while (reader.Read())
+                    {
+                        if(docNumber == reader.GetValue(9).ToString())
+                        {
+                            Console.WriteLine($"ID: {reader["Id"]},\n" +
+                                              $" First name: {reader["FirstName"]}, \n" +
+                                              $"Last name: {reader["LastName"]},\n" +
+                                              $" Middle name: {reader["MiddleName"]}, \n" +
+                                              $"Phone number: {reader["PhoneNumber"]}\n" +
+                                              $" Date of birth: {reader["DOB"]}, \n" +
+                                              $"Citizenship: {reader["Citizenship"]},\n" +
+                                              $"Gender: {reader["Gender"]},\n" +
+                                              $"MaritalStatus: {reader["MaritalStatus"]},\n" +
+                                              $" Document Number: {reader["DocNumber"]}, \n" +
+                                              $"Login: {reader["Login"]},\n" +
+                                              $"Password: {reader["Password"]}");
+                        }
+                    }
                 }
             }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
         }
-
         public static bool customerValidityCheck()
         {
             Console.Clear();
@@ -157,11 +183,11 @@ namespace AlifMidTermProject
                 string login = Console.ReadLine();
                 Console.WriteLine("Enter password: ");
                 string password = Console.ReadLine();
-                command.CommandText = $"select * from CustomerCredentials";
+                command.CommandText = $"select * from Clients";
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (login == reader.GetValue(1).ToString() && password == reader.GetValue(2).ToString())
+                    if (login == reader.GetValue(10).ToString() && password == reader.GetValue(11).ToString())
                     {
                         return true;
                     }
@@ -176,6 +202,21 @@ namespace AlifMidTermProject
                 connection.Close();
             }
             return false;
+        }
+        public static void deleteByDocNumber()
+        {
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
+            string docNumber = Console.ReadLine();
+            string str1 = $"DELETE Clients WHERE DocNumber = '{docNumber}'";
+            using (SqlCommand command = new SqlCommand(str1, connection))
+            {
+                var result = command.ExecuteNonQuery();
+                if(result > 0)
+                {
+                    Console.Write("Deleted");
+                }
+            }
         }
     }   
 }

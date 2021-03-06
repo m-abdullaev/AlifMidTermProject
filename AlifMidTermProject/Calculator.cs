@@ -6,10 +6,10 @@ namespace AlifMidTermProject
 {
     public static class Calculator
     {
-        public static bool GetResult(int age, int creditHistory, int overdueCreditHistory)
+        public static bool GetResult(int age, char Gender, int creditHistory, int overdueCreditHistory, decimal SumOfCredit, decimal TotalIncome, string CreditAim )
         {
             int score = 0;
-            if (Customers.Gender == 'F')
+            if (Gender == 'F')
                 score += 2;
             else
                 score++;
@@ -26,9 +26,9 @@ namespace AlifMidTermProject
                 score += 0;
             else if (age >= 26 && age <= 35)
                 score += 1;
-            else if (age >= 36 && age <= 62)
+            else if (age > 35 && age < 63)
                 score += 2;
-            else if (age > 63)
+            else if (age >= 63)
                 score += 1;
 
             if (Customers.Citizenship == "Tajikistan")
@@ -36,7 +36,16 @@ namespace AlifMidTermProject
             else if (Customers.Citizenship == "Foreigner")
                 score+=0;
 
-            decimal salaryFromCreditSum = Application.SumOfCredit * 100 / Application.TotalIncome;
+            decimal salaryFromCreditSum = SumOfCredit * 100 / TotalIncome;
+
+            if (salaryFromCreditSum <= 80)
+                score += 4;
+            else if (salaryFromCreditSum > 80 && salaryFromCreditSum <= 150)
+                score += 3;
+            else if (salaryFromCreditSum > 150 && salaryFromCreditSum <= 250)
+                score += 2;
+            else
+                score += 1;
 
             if (creditHistory >= 3)
                 score += 2;
@@ -47,26 +56,35 @@ namespace AlifMidTermProject
 
             if (overdueCreditHistory > 7)
                 score -= 3;
-            else if (overdueCreditHistory == 5 || overdueCreditHistory == 6 || overdueCreditHistory == 7)
+            else if (overdueCreditHistory >= 5 && creditHistory <= 7)
                 score -= 2;
             else if (overdueCreditHistory == 4)
                 score -= 1;
-            else if (overdueCreditHistory < 3)
+            else if (overdueCreditHistory <= 3)
                 score += 0;
 
-            if (Application.CreditAim == "Appliances")
+            if (CreditAim == "Appliances")
                 score += 2;
-            else if (Application.CreditAim == "Construction")
+            else if (CreditAim == "Construction")
                 score++;
-            else if (Application.CreditAim == "Cell Phone")
+            else if (CreditAim == "Cell Phone")
                 score += 0;
             else
                 score--;
+
             if (Application.CreditTerm >= 12)
                 score++;
             else score++;
-
-            return (score > 12) ? true : false;
+            if(score>11)
+            {
+                Console.WriteLine("Score = "+score);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Score = " + score);
+                return false;
+            }
         }
     }
 }
